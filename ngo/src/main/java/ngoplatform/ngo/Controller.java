@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 @RestController
 public class Controller {
     
@@ -39,29 +42,40 @@ public class Controller {
     public String test(@RequestParam(value = "size", defaultValue = "0") int size) {
         String data;
         List<TestClass> testList = new ArrayList<TestClass>() {{
-            add(new TestClass("ASSOC-1", "What", 1));
-            add(new TestClass("ASSOC-2", "Scope", 2));
-            add(new TestClass("ASSOC-3", "Why", 3));
-            add(new TestClass("ASSOC-4", "How", 4));
+            add(new TestClass("ASSOC-1", "Scope-1", 1));
+            add(new TestClass("ASSOC-2", "Scope-2", 2));
+            add(new TestClass("ASSOC-3", "Scope-3", 3));
+            add(new TestClass("ASSOC-4", "Scope-4", 4));
+            add(new TestClass("ASSOC-5", "Scope-5", 5));
+            add(new TestClass("ASSOC-6", "Scope-6", 6));
+            add(new TestClass("ASSOC-7", "Scope-7", 7));
+            add(new TestClass("ASSOC-8", "Scope-8", 8));
+            add(new TestClass("ASSOC-9", "Scope-9", 9));
+            add(new TestClass("ASSOC-10", "Scope-10", 10));
+            add(new TestClass("ASSOC-11", "Scope-11", 11));
         }};
-        data = "[";
+        data = "[\n";
         if (size == 0) {
-            for (int i = 0; i < testList.size(); i++) {
-                data += testList.get(i).toJSON();
-                if (i != testList.size() - 1) {
-                    data += ",";
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            try {
+                for (TestClass test : testList) {
+                    data += ow.writeValueAsString(test) + ",";
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } else {
-            for (int i = 0; i < size; i++) {
-                data += testList.get(i).toJSON();
-                if (i != size - 1) {
-                    data += ",";
+        }
+        else {
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            try {
+                for (int i = 0; i < size; i++) {
+                    data += ow.writeValueAsString(testList.get(i)) + ",";
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         data += "]";
         return data;
-    }
-}
+}}
 
