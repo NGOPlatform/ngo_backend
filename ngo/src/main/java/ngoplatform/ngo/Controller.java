@@ -54,12 +54,15 @@ public class Controller {
             add(new TestClass("ASSOC-10", "Scope-10", 10));
             add(new TestClass("ASSOC-11", "Scope-11", 11));
         }};
-        data = "[\n";
+        data = "[";
         if (size == 0) {
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             try {
                 for (TestClass test : testList) {
-                    data += ow.writeValueAsString(test) + ",";
+                    data += ow.writeValueAsString(test);
+                    if (testList.indexOf(test) != testList.size() - 1) {
+                        data += ",";
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -69,7 +72,10 @@ public class Controller {
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             try {
                 for (int i = 0; i < size; i++) {
-                    data += ow.writeValueAsString(testList.get(i)) + ",";
+                    data += ow.writeValueAsString(testList.get(i));
+                    if (i != size - 1) {
+                        data += ",";
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
