@@ -40,7 +40,6 @@ public class Controller {
             add(new TestClass("ASSOC-8", "Scope-8", 8));
             add(new TestClass("ASSOC-9", "Scope-9", 9));
             add(new TestClass("ASSOC-10", "Scope-10", 10));
-            add(new TestClass("ASSOC-11", "Scope-11", 11));
         }};
         return testList.get(Integer.parseInt(id)).toJSON();
     }
