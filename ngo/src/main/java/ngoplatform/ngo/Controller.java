@@ -17,17 +17,17 @@ public class Controller {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
-    @GetMapping("/v0/")
+    @GetMapping("/")
     public String index() {
         return "Greetings from Spring Boot!";
     }
 
-    @GetMapping("/v0/greeting")
+    @GetMapping("/greeting")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
 
-    @GetMapping("/v0/test")
+    @GetMapping("/test")
     public String test(@RequestParam(value = "id", defaultValue = "0") String id) {
         List<TestClass> testList = new ArrayList<TestClass>() {{
             add(new TestClass("ASSOC-1", "Scope-1", 1));
@@ -44,7 +44,7 @@ public class Controller {
         return testList.get(Integer.parseInt(id)).toJSON();
     }
 
-    @GetMapping("/v0/testAll")
+    @GetMapping("/testAll")
     public String test(@RequestParam(value = "size", defaultValue = "0") int size) {
         String data;
         List<TestClass> testList = new ArrayList<TestClass>() {{
@@ -91,7 +91,7 @@ public class Controller {
         return data;
     }
 
-    @GetMapping("/v0/filter")
+    @GetMapping("/filter")
     public String filter(@RequestParam(value = "filters", defaultValue = "none") String filters) {
         String data;
         List<TestClass> testList = new ArrayList<TestClass>() {{
