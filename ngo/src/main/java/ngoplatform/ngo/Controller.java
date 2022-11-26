@@ -30,10 +30,16 @@ public class Controller {
     @GetMapping("/test")
     public String test(@RequestParam(value = "id", defaultValue = "0") String id) {
         List<TestClass> testList = new ArrayList<TestClass>() {{
-            add(new TestClass("ASSOC-1", "What", 1));
-            add(new TestClass("ASSOC-2", "Scope", 2));
-            add(new TestClass("ASSOC-3", "Why", 3));
-            add(new TestClass("ASSOC-4", "How", 4));
+            add(new TestClass("ASSOC-1", "Scope-1", 1));
+            add(new TestClass("ASSOC-2", "Scope-2", 2));
+            add(new TestClass("ASSOC-3", "Scope-3", 3));
+            add(new TestClass("ASSOC-4", "Scope-4", 4));
+            add(new TestClass("ASSOC-5", "Scope-5", 5));
+            add(new TestClass("ASSOC-6", "Scope-6", 6));
+            add(new TestClass("ASSOC-7", "Scope-7", 7));
+            add(new TestClass("ASSOC-8", "Scope-8", 8));
+            add(new TestClass("ASSOC-9", "Scope-9", 9));
+            add(new TestClass("ASSOC-10", "Scope-10", 10));
         }};
         return testList.get(Integer.parseInt(id)).toJSON();
     }
