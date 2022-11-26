@@ -83,5 +83,58 @@ public class Controller {
         }
         data += "]";
         return data;
-}}
+    }
+
+    @GetMapping("/filter")
+    public String filter(@RequestParam(value = "filters", defaultValue = "none") String filters) {
+        String data;
+        List<TestClass> testList = new ArrayList<TestClass>() {{
+            add(new TestClass("ASSOC-1", "Scope-1", 1));
+            add(new TestClass("ASSOC-2", "Scope-2", 2));
+            add(new TestClass("ASSOC-3", "Scope-3", 3));
+            add(new TestClass("ASSOC-4", "Scope-4", 4));
+            add(new TestClass("ASSOC-5", "Scope-5", 5));
+            add(new TestClass("ASSOC-6", "Scope-6", 6));
+            add(new TestClass("ASSOC-7", "Scope-7", 7));
+            add(new TestClass("ASSOC-8", "Scope-8", 8));
+            add(new TestClass("ASSOC-9", "Scope-9", 9));
+            add(new TestClass("ASSOC-10", "Scope-10", 10));
+            add(new TestClass("ASSOC-11", "Scope-11", 11));
+            add(new TestClass("ASSOC-12", "Scope-5", 12));
+        }};
+        data = "[";
+        if (filters.equals("none")) {
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            try {
+                for (TestClass test : testList) {
+                    data += ow.writeValueAsString(test);
+                    if (testList.indexOf(test) != testList.size() - 1) {
+                        data += ",";
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            try {
+                for (TestClass test : testList) {
+                    if (test.getContent().equals(filters)) {
+                        data += ow.writeValueAsString(test);
+                        if (testList.indexOf(test) != testList.size() - 1) {
+                            data += ",";
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        data += "]";
+        return data;
+    }
+}
+
+
 
