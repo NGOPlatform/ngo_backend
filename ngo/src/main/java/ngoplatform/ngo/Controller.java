@@ -17,7 +17,7 @@ public class Controller {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
-    @GetMapping("/")
+    @GetMapping("/v0/")
     public String index() {
         return "Greetings from Spring Boot!";
     }
