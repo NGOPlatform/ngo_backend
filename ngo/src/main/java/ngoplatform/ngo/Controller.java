@@ -22,12 +22,12 @@ public class Controller {
         return "Greetings from Spring Boot!";
     }
 
-    @GetMapping("/greeting")
+    @GetMapping("/v0/greeting")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
 
-    @GetMapping("/test")
+    @GetMapping("/v0/test")
     public String test(@RequestParam(value = "id", defaultValue = "0") String id) {
         List<TestClass> testList = new ArrayList<TestClass>() {{
             add(new TestClass("ASSOC-1", "Scope-1", 1));
@@ -44,7 +44,7 @@ public class Controller {
         return testList.get(Integer.parseInt(id)).toJSON();
     }
 
-    @GetMapping("/testAll")
+    @GetMapping("/v0/testAll")
     public String test(@RequestParam(value = "size", defaultValue = "0") int size) {
         String data;
         List<TestClass> testList = new ArrayList<TestClass>() {{
@@ -91,7 +91,7 @@ public class Controller {
         return data;
     }
 
-    @GetMapping("/filter")
+    @GetMapping("/v0/filter")
     public String filter(@RequestParam(value = "filters", defaultValue = "none") String filters) {
         String data;
         List<TestClass> testList = new ArrayList<TestClass>() {{
