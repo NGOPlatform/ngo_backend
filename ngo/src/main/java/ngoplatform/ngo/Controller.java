@@ -70,7 +70,7 @@ public class Controller {
                 {
                     while(skip < testList.size())
                     {
-                        if (testList.get(skip).getDescription().contains(description) && testList.get(skip).getCity().contains(city) && testList.get(skip).getCounty().contains(county)) {
+                        if (testList.get(skip).getDescription().toLowerCase().contains(description.toLowerCase()) && testList.get(skip).getCity().toLowerCase().contains(city.toLowerCase()) && testList.get(skip).getCounty().toLowerCase().contains(county.toLowerCase())) {
                             data += ow.writeValueAsString(testList.get(skip));
                             if (skip != testList.size() - 1) {
                                 data += ",";
@@ -83,7 +83,7 @@ public class Controller {
                 {
                     while(size > 0)
                     {
-                        if (testList.get(skip).getDescription().contains(description) && testList.get(skip).getCity().contains(city) && testList.get(skip).getCounty().contains(county)) {
+                        if (testList.get(skip).getDescription().toLowerCase().contains(description.toLowerCase()) && testList.get(skip).getCity().toLowerCase().contains(city.toLowerCase()) && testList.get(skip).getCounty().toLowerCase().contains(county.toLowerCase())) {
                             data += ow.writeValueAsString(testList.get(skip));
                             if (size != 1) {
                                 data += ",";
