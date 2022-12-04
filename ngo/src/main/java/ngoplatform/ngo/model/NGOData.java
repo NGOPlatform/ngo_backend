@@ -1,4 +1,4 @@
-package ngoplatform.ngo;
+package ngoplatform.ngo.model;
 
 public class NGOData {
     private final String name, regNumber, county, city, address, description;

@@ -1,8 +1,9 @@
-package ngoplatform.ngo;
+package ngoplatform.ngo.controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,9 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import ngoplatform.ngo.model.NGOData;
+//import ngoplatform.ngo.model.ONG;
+//import ngoplatform.ngo.service.ONGService;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class Controller {
+    //@Autowired
+    //private ONGService service;
 
     @GetMapping("/")
     public String index() {
@@ -100,6 +107,12 @@ public class Controller {
         data += "\n]";
         return data;
     }
+
+    /*//Connect to a oracle database and return the data
+    @GetMapping("/DBTest")
+    public List<ONG> getSomeONGs() {
+        return service.getSomeONGs();
+    }*/
 }
 
 

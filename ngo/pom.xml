@@ -22,6 +22,26 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!--	For now, no DB connection is used.
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11-production</artifactId>
+			<version>21.5.0.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.oracle.database.ha</groupId>
+					<artifactId>simplefan</artifactId>
+				</exclusion>
+			</exclusions>
+			<type>pom</type>
+		</dependency>
+		-->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
