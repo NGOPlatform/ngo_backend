@@ -110,21 +110,40 @@ public class Controller {
     }
 
     //Connect to a oracle database and return the data
-    @GetMapping(value = "/DBTest")
-    public static String DBTest() throws Exception {
+    @GetMapping("/filter2")
+    public static String DBTest() {
         String result = "";
+        try {
         Class.forName("oracle.jdbc.driver.OracleDriver");
-        Connection conn = DriverManager.getConnection(
-            "jdbc:oracle:thin:@PS9YSBPXXM91ULT5_high?TNS_ADMIN=/Users/ika/Documents/VSCode/PI/Wallet_PS9YSBPXXM91ULT5", "usr", "passwd");
-        Statement stmt = conn.createStatement();
-        ResultSet rset = stmt.executeQuery("select * from emp");
-        while (rset.next()) {
-           result += rset.getString(1) + " " + rset.getString(2);
-        }
+        System.out.println("Driver loaded");
+        //Connection conn = DriverManager.getConnection(
+        //    "jdbc:oracle:thin:@EZ2PDN49SSBXNE22_high?TNS_ADMIN=B:/Software/Wallet_EZ2PDN49SSBXNE22/", "ADMIN", "whatPassword1");
+        //System.out.println("Database connected");
+        //Statement stmt = conn.createStatement();
+        //ResultSet rset = stmt.executeQuery("select * from ong fetch first 10 rows only");
+        //while (rset.next()) {
+        //   result += rset.getString("DENUMIRE") + " " + rset.getString("NR_INREG") + 
+        //                rset.getString("JUDET") + " " + rset.getString("LOCALITATE") +
+        //                rset.getString("ADRESA") + " " + rset.getString("DESCRIERE") + '\n';
+        //}
+            Connection conn = DriverManager.getConnection(
+                "jdbc:oracle:thin:@PS9YSBPXXM91ULT5_high?TNS_ADMIN=B:/Software/Wallet_PS9YSBPXXM91ULT5/", "ADMIN", "Caracter2101");
+            System.out.println("Database connected");
+            Statement stmt = conn.createStatement();
+            ResultSet rset = stmt.executeQuery("select * from emp");
+            while (rset.next()) {
+                result += rset.getString("EMPNO") + " " + rset.getString("ENAME") + 
+                            rset.getString("JOB") + " " + rset.getString("MGR") +
+                            rset.getString("HIREDATE") + " " + rset.getString("SAL") + '\n';
+            }
         rset.close();
         stmt.close();
-        conn.close();
+        conn.close(); 
         return result;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "Error: " + e.toString();
+    }
     }
 }
 
