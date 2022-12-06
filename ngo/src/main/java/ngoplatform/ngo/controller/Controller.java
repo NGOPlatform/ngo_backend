@@ -1,5 +1,6 @@
 package ngoplatform.ngo.controller;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,11 +109,23 @@ public class Controller {
         return data;
     }
 
-    /*//Connect to a oracle database and return the data
-    @GetMapping("/DBTest")
-    public List<ONG> getSomeONGs() {
-        return service.getSomeONGs();
-    }*/
+    //Connect to a oracle database and return the data
+    @GetMapping(value = "/DBTest")
+    public static String DBTest() throws Exception {
+        String result = "";
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        Connection conn = DriverManager.getConnection(
+            "jdbc:oracle:thin:@PS9YSBPXXM91ULT5_high?TNS_ADMIN=/Users/ika/Documents/VSCode/PI/Wallet_PS9YSBPXXM91ULT5", "usr", "passwd");
+        Statement stmt = conn.createStatement();
+        ResultSet rset = stmt.executeQuery("select * from emp");
+        while (rset.next()) {
+           result += rset.getString(1) + " " + rset.getString(2);
+        }
+        rset.close();
+        stmt.close();
+        conn.close();
+        return result;
+    }
 }
 
 
