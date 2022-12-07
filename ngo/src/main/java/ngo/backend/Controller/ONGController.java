@@ -3,16 +3,14 @@ package ngo.backend.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import ngo.backend.Model.ONG;
 import ngo.backend.Service.ONGService;
 
 @RestController
 @RequestMapping("/api/ong")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ONGController {
     @Autowired
     private ONGService service;
