@@ -13,6 +13,7 @@ import ngo.backend.Service.ONGService;
 
 @RestController
 @RequestMapping("/api/ong")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ONGController {
     @Autowired
     private ONGService service;
