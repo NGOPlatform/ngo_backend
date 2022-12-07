@@ -15,15 +15,15 @@ public class ONG {
     private String denumire;
     @Id
     @Column(name = "nr_inreg")
-    private String nr_inreg;
+    private String regNumber;
     @Column(name = "judet")
-    private String judet;
+    private String county;
     @Column(name = "localitate")
-    private String localitate;
+    private String city;
     @Column(name = "adresa")
-    private String adresa;
+    private String address;
     @Column(name = "descriere")
-    private String descriere;
+    private String description;
     @Column(name = "email")
     private String email;
 
@@ -32,11 +32,11 @@ public class ONG {
 
     public ONG(String denumire, String nr_inreg, String judet, String localitate, String adresa, String descriere, String email) {
         this.denumire = denumire;
-        this.nr_inreg = nr_inreg;
-        this.judet = judet;
-        this.localitate = localitate;
-        this.adresa = adresa;
-        this.descriere = descriere;
+        this.regNumber = nr_inreg;
+        this.county = judet;
+        this.city = localitate;
+        this.address = adresa;
+        this.description = descriere;
         this.email = email;
     }
 
@@ -49,43 +49,43 @@ public class ONG {
     }
 
     public String getNr_inreg() {
-        return nr_inreg;
+        return regNumber;
     }
 
     public void setNr_inreg(String nr_inreg) {
-        this.nr_inreg = nr_inreg;
+        this.regNumber = nr_inreg;
     }
 
     public String getJudet() {
-        return judet;
+        return county;
     }
 
     public void setJudet(String judet) {
-        this.judet = judet;
+        this.county = judet;
     }
 
     public String getLocalitate() {
-        return localitate;
+        return city;
     }
 
     public void setLocalitate(String localitate) {
-        this.localitate = localitate;
+        this.city = localitate;
     }
 
     public String getAdresa() {
-        return adresa;
+        return address;
     }
 
     public void setAdresa(String adresa) {
-        this.adresa = adresa;
+        this.address = adresa;
     }
 
     public String getDescriere() {
-        return descriere;
+        return description;
     }
 
     public void setDescriere(String descriere) {
-        this.descriere = descriere;
+        this.description = descriere;
     }
 
     public String getEmail() {
