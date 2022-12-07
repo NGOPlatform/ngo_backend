@@ -54,14 +54,14 @@ public class ONGController {
             size = list.size();
         if (!descriere.isBlank() || !localitate.isBlank() || !judet.isBlank()) {
             for (int i = skip; i < size && i < list.size(); i++) {
-                //if(list.get(i).getDescriere() == null && !descriere.isBlank())
-                //    continue;
-                //if(list.get(i).getLocalitate() == null && !localitate.isBlank())
-                //    continue;
-                //if(list.get(i).getJudet() == null && !judet.isBlank())
-                //    continue;
-                if (list.get(i).getDescriere().contains(descriere) || list.get(i).getLocalitate().contains(localitate)
-                        || list.get(i).getJudet().contains(judet)) {
+                if (list.get(i).getDescriere() == null)
+                    list.get(i).setDescriere("");
+                if (list.get(i).getLocalitate() == null)
+                    list.get(i).setLocalitate("");
+                if (list.get(i).getJudet() == null)
+                    list.get(i).setJudet("");
+                if (list.get(i).getDescriere().contains(descriere) && list.get(i).getLocalitate().contains(localitate)
+                        && list.get(i).getJudet().contains(judet)) {
                     result += list.get(i).toString();
                     if (i != list.size() - 1 && i != size - 1)
                         result += ",\n";
