@@ -3,7 +3,11 @@ package ngo.backend.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import ngo.backend.Model.ONG;
 import ngo.backend.Service.ONGService;
@@ -39,9 +43,9 @@ public class ONGController {
     }
 
     @GetMapping("/list")
-    public String list(@RequestParam(value = "descriere", defaultValue = "") String descriere,
-                       @RequestParam(value = "localitate", defaultValue = "") String localitate,
-                       @RequestParam(value = "judet", defaultValue = "") String judet,
+    public String list(@RequestParam(value = "description", defaultValue = "") String descriere,
+                       @RequestParam(value = "city", defaultValue = "") String localitate,
+                       @RequestParam(value = "county", defaultValue = "") String judet,
                        @RequestParam(value = "size", defaultValue = "0") int size,
                        @RequestParam(value = "skip", defaultValue = "0") int skip) {
         List<ONG> list = service.listAll();
