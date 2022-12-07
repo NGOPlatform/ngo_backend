@@ -1,10 +1,10 @@
-package ngoplatform.ngo;
+package ngo.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class NgoApplicationTests {
+class NgoApiApplicationTests {
 
 	@Test
 	void contextLoads() {
