@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RestController
 @RequestMapping("/api/test")
 @CrossOrigin(origins = "http://localhost:3000")
-public class GenericController {
+public class Controller {
     @GetMapping("")
     public String get() {
         return "Hello World!";
