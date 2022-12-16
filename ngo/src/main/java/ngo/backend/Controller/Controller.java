@@ -17,10 +17,10 @@ public class Controller {
     }
 
     public static Connection getConnection() throws SQLException {
-        String hostName = "ongfinder.database.windows.net";
+        String hostName = "contoso.database.windows.net";
         String dbName = "ONGFinder";
-        String user = "cbt";
-        String password = "whatPassword?";
+        String user = "usr";
+        String password = "pwd";
         String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);
         return java.sql.DriverManager.getConnection(url);
     }
