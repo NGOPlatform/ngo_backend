@@ -1,40 +1,72 @@
 package ngo.backend.Cryptography;
 
+import java.io.ByteArrayOutputStream;
+import java.security.AlgorithmParameters;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+import java.util.Arrays;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import jakarta.xml.bind.DatatypeConverter;
+
 public class deEncrypt {
-    public static String encrypt(String strToEncrypt, String secret) {
+    public static String encrypt(String str, String password) {
         try {
-            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, getSecretKey(secret));
-            return jakarta.xml.bind.DatatypeConverter.printBase64Binary(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
+            SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[16];
+            random.nextBytes(salt);
+    
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+    
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secret);
+            AlgorithmParameters params = cipher.getParameters();
+            byte[] iv = params.getParameterSpec(IvParameterSpec.class).getIV();
+            byte[] encryptedText = cipher.doFinal(str.getBytes("UTF-8"));
+    
+            // concatenate salt + iv + ciphertext
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            outputStream.write(salt);
+            outputStream.write(iv);
+            outputStream.write(encryptedText);
+    
+            // properly encode the complete ciphertext
+            return DatatypeConverter.printBase64Binary(outputStream.toByteArray());
         } catch (Exception e) {
-            System.out.println("Error while encrypting: " + e.toString());
+            e.printStackTrace();
         }
         return null;
     }
-
-    public static String decrypt(String strToDecrypt, String secret) {
+    
+    public static String decrypt(String str, String password) {
         try {
-            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES/ECB/PKCS5PADDING");
-            cipher.init(javax.crypto.Cipher.DECRYPT_MODE, getSecretKey(secret));
-            return new String(cipher.doFinal(jakarta.xml.bind.DatatypeConverter.parseBase64Binary(strToDecrypt)));
-        } catch (Exception e) {
-            System.out.println("Error while decrypting: " + e.toString());
-        }
-        return null;
-    }
-
-    private static javax.crypto.SecretKey getSecretKey(String myKey) {
-        java.security.MessageDigest sha = null;
-        try {
-            byte[] key = myKey.getBytes("UTF-8");
-            sha = java.security.MessageDigest.getInstance("SHA-1");
-            key = sha.digest(key);
-            key = java.util.Arrays.copyOf(key, 16);
-            return new javax.crypto.spec.SecretKeySpec(key, "AES");
-        } catch (java.security.NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (java.io.UnsupportedEncodingException e) {
-            e.printStackTrace();
+            byte[] ciphertext = DatatypeConverter.parseBase64Binary(str);
+            if (ciphertext.length < 48) {
+                return null;
+            }
+            byte[] salt = Arrays.copyOfRange(ciphertext, 0, 16);
+            byte[] iv = Arrays.copyOfRange(ciphertext, 16, 32);
+            byte[] ct = Arrays.copyOfRange(ciphertext, 32, ciphertext.length);
+    
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+    
+            cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
+            byte[] plaintext = cipher.doFinal(ct);
+    
+            return new String(plaintext, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
         }
