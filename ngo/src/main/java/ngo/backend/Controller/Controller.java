@@ -1,11 +1,16 @@
 package ngo.backend.Controller;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
+
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
+import ngo.backend.Cryptography.deEncrypt;
 
 @RestController
 @RequestMapping("/api/test")
@@ -16,13 +21,45 @@ public class Controller {
         return "Hello World!";
     }
 
+    public static String readConfig() {
+        try {
+            String config = new String(Files.readAllBytes(Paths.get("config.json")));
+            return config;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static Connection getConnection() throws SQLException {
-        String hostName = "contoso.database.windows.net";
-        String dbName = "ONGFinder";
-        String user = "usr";
-        String password = "pwd";
+
+        //Parse the json string to get the details
+        String data = readConfig();
+        String[] split = data.split(":");
+        String user = split[1].substring(1, split[1].length() - 2);
+        String encPass = split[2].substring(1, split[2].length() - 2);
+        String key = split[3].substring(1, split[3].length() - 2);
+        String hostName = split[4].substring(1, split[4].length() - 2);
+        String dbName = split[5].substring(1, split[5].length() - 2);
+
+        //String hostName = "ongfinder.database.windows.net";
+        //String dbName = "ONGFinder";
+        //String user = "cbt";
+        String password = deEncrypt.decrypt(encPass, key);
         String url = String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", hostName, dbName, user, password);
         return java.sql.DriverManager.getConnection(url);
+    }
+
+    @GetMapping("/encryptTest")
+    public String encTest(){
+        String input = "Hello World!";
+        String password = "1987";
+        String encrypted = deEncrypt.encrypt(input, password);
+        String decrypted = deEncrypt.decrypt(encrypted, password);
+        return "Input: " + input + "\n" +
+                "Password: " + password + "\n" +
+                "Encrypted: " + encrypted + "\n" +
+                "Decrypted: " + decrypted;
     }
 
     @GetMapping("/list")
