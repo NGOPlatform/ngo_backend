@@ -401,7 +401,7 @@ public class Controller {
                                 "\t\t\"isAdmin\": \"" + rs.getBoolean("ISADMIN") + "\",\n" +
                                 "\t\t\"subscriptions\": \"" + rs.getString("SUBSCRIPTIONS") + "\",\n" +
                                 "\t\t\"favorites\": \"" + rs.getString("FAVORITES") + "\",\n" +
-                                "\t\t\"notifications\": \"" + rs.getString("NOTIFICATIONS") + "\",\n" +
+                                "\t\t\"notifications\": \"" + rs.getString("NOTIFICATIONS") + "\"\n" +
                                 "\t}" + ",\n";
                     }
                 } catch (SQLException e) {
