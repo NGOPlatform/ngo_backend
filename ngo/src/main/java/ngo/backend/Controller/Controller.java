@@ -5,8 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.File;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import ngo.backend.Cryptography.deEncrypt;
 import ngo.backend.Model.Config;
+import ngo.backend.Model.ngo;
 
 @RestController
 @RequestMapping("ongAPI")
@@ -130,16 +132,22 @@ public class Controller {
                     java.sql.ResultSet rs = stmt.executeQuery(myQuerry);
                     result += "[\n";    //Iterate through all rows and build a JSON set response
                     while (rs.next()) {
-                        result += "\t{\n" +
-                                "\t\t\"id\": " + rs.getInt("id") + ",\n" +
-                                "\t\t\"name\": \"" + rs.getString("denumire") + "\",\n" +
-                                "\t\t\"regNo\": \"" + rs.getString("nr_inreg") + "\",\n" +
-                                "\t\t\"county\": \"" + rs.getString("judet") + "\",\n" +
-                                "\t\t\"city\": \"" + rs.getString("localitate") + "\",\n" +
-                                "\t\t\"address\": \"" + rs.getString("adresa") + "\",\n" +
-                                "\t\t\"description\": \"" + rs.getString("descriere") + "\",\n" +
-                                "\t\t\"email\": \"" + rs.getString("email") + "\",\n" +
-                                "\t}" + ",\n";
+                        ngo ong = new ngo(rs.getInt("ID"),
+                                            rs.getString("denumire"),
+                                            rs.getString("nr_inreg"),
+                                            rs.getString("judet"),
+                                            rs.getString("localitate"),
+                                            rs.getString("adresa"),
+                                            rs.getString("descriere"),
+                                            rs.getString("email"));
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+                            String json = mapper.writeValueAsString(ong);
+                            result += json + ",\n";
+                        } catch (JsonProcessingException e) {
+                            return e.getMessage();
+                        }
                     }
                 } catch (SQLException e) {
                     return e.getMessage();
@@ -242,16 +250,22 @@ public class Controller {
                     java.sql.ResultSet rs = stmt.executeQuery(myQuerry);
                     result += "[\n";    //Iterate through all rows and build a JSON set response
                     while (rs.next()) {
-                        result += "\t{\n" +
-                                "\t\t\"id\": " + rs.getInt("id") + ",\n" +
-                                "\t\t\"name\": \"" + rs.getString("denumire") + "\",\n" +
-                                "\t\t\"regNo\": \"" + rs.getString("nr_inreg") + "\",\n" +
-                                "\t\t\"county\": \"" + rs.getString("judet") + "\",\n" +
-                                "\t\t\"city\": \"" + rs.getString("localitate") + "\",\n" +
-                                "\t\t\"address\": \"" + rs.getString("adresa") + "\",\n" +
-                                "\t\t\"description\": \"" + rs.getString("descriere") + "\",\n" +
-                                "\t\t\"email\": \"" + rs.getString("email") + "\",\n" +
-                                "\t}" + ",\n";
+                        ngo ong = new ngo(rs.getInt("ID"),
+                                            rs.getString("denumire"),
+                                            rs.getString("nr_inreg"),
+                                            rs.getString("judet"),
+                                            rs.getString("localitate"),
+                                            rs.getString("adresa"),
+                                            rs.getString("descriere"),
+                                            rs.getString("email"));
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+                            String json = mapper.writeValueAsString(ong);
+                            result += json + ",\n";
+                        } catch (JsonProcessingException e) {
+                            return e.getMessage();
+                        }
                     }
                 } catch (SQLException e) {
                     return e.getMessage();
