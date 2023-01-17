@@ -55,6 +55,47 @@ public class Controller {
         return "Is that the bite of '87?!";
     }
 
+    @GetMapping("/getONG")
+    public String getONG(@RequestParam(value = "id", defaultValue = "0") int id) {
+        if(id == 0)
+            return "{ \"error\": \"No ID provided\" }";
+        Connection conn = null;
+        String result = "";
+        try {
+            conn = getConnection();
+        } catch (SQLException e) {
+            return e.getMessage();
+        } finally {
+            if (conn != null) {
+                try {
+                    String mySelect = "SELECT * FROM dbo.ONG WHERE id = " + id;
+                    Statement stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery(mySelect);
+                    if (rs.next()) {
+                        ngo ong = new ngo(rs.getInt("ID"),
+                                            rs.getString("denumire"),
+                                            rs.getString("nr_inreg"),
+                                            rs.getString("judet"),
+                                            rs.getString("localitate"),
+                                            rs.getString("adresa"),
+                                            rs.getString("descriere"),
+                                            rs.getString("email"));
+                        ObjectMapper mapper = new ObjectMapper();
+                        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+                        result = mapper.writeValueAsString(ong);
+                    } else {
+                        result = "{ \"error\": \"No ONG with this ID\" }";
+                    }
+                } catch (SQLException e) {
+                    result = e.getMessage();
+                } catch (JsonProcessingException e) {
+                    result = e.getMessage();
+                }
+            }
+        }
+        return result;
+    }
+
     @GetMapping("/listONG")
     public String listONG(@RequestParam(value = "size", defaultValue = "0") int size,
                             @RequestParam(value = "skip", defaultValue = "0") int skip,
@@ -426,6 +467,58 @@ public class Controller {
             return "[]";
         else //Otherwise return the set
         return result.substring(0, result.length()-2) + "\n]";
+    }
+
+    @PutMapping("/changePassword")
+    public String resetPWD(@RequestParam(value = "oldPassword", defaultValue = "") String oldPW,
+                            @RequestParam(value = "newPassword", defaultValue = "") String newPW,
+                            @RequestParam(value = "username", defaultValue = "") String username) {
+        
+        if (newPW.equals(""))
+            return "{\"error\": \"New password is empty\"}";
+        else if(getUser(username, oldPW) == "[]")
+            return "{\"error\": \"Old password is wrong.\"}";
+
+        Connection conn = null;
+        
+        try {
+            conn = getConnection();
+        } catch (SQLException e) {
+            return e.getMessage();
+        } finally {
+            if (conn != null) {
+                String myUpdate = "UPDATE dbo.USERS";
+
+                String mySet = " SET password = '" + newPW + "'";
+
+                String myWhere = " WHERE username = '" + username + "' AND password = '" + oldPW + "'";
+
+                String myQuerry = myUpdate + mySet + myWhere;
+                System.out.println(myQuerry);   //Debug
+
+                java.sql.Statement stmt = null;
+                try {
+                    stmt = conn.createStatement();
+                    stmt.executeUpdate(myQuerry);
+                } catch (SQLException e) {
+                    return e.getMessage();
+                } finally {
+                    if (stmt != null) {
+                        try {
+                            stmt.close();
+                        } catch (SQLException e) {
+                            return e.getMessage();
+                        }
+                    }
+                }
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    return e.getMessage();
+                }
+            }
+        }
+        return "{\"success\": \"Password changed\"}";
     }
 
     @PutMapping("/updateUserSub")
