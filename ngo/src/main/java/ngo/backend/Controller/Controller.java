@@ -214,6 +214,96 @@ public class Controller {
         return result.substring(0, result.length()-2) + "\n]";
     }
 
+    @GetMapping("/listONGSize")
+    public String listONGSize(@RequestParam(value = "size", defaultValue = "0") int size,
+                            @RequestParam(value = "skip", defaultValue = "0") int skip,
+                            @RequestParam(value = "city", defaultValue = "") String city,
+                            @RequestParam(value = "county", defaultValue = "") String county,
+                            @RequestParam(value = "tag", defaultValue = "") String tags) {
+        Connection conn = null;
+        String result = "";
+        try {
+            conn = getConnection();
+        } catch (SQLException e) {
+            return e.getMessage();
+        } finally {
+            if (conn != null) {
+
+                String mySelect = "SELECT COUNT(ID) FROM dbo.ONG";
+
+                String myWhere;
+
+                //Check if all search parameters are empty
+                if (city.equals("") && county.equals("") && tags.equals(""))
+                    myWhere = "";
+                else
+                    myWhere = " WHERE ";
+
+                //Add search parameters to where clause
+                if (!city.equals("")) //If city is not empty
+                    myWhere += "localitate LIKE '%" + city + "%'";
+                if (!county.equals("")) { //If county is not empty
+                    if (!city.equals("")) //If city is not empty add AND
+                        myWhere += " AND ";
+                    myWhere += "judet LIKE '%" + county + "%'";
+                }
+                if (!tags.equals("")) { //If tags is not empty
+                    if (!city.equals("") || !county.equals("")) //If city or county is not empty add AND
+                        myWhere += " AND ";
+
+                    //Split tags by comma
+                    List<String> tagsList = Arrays.asList(tags.split(","));
+
+                    //Trim whitespace in tagsList
+                    for (int i = 0; i < tagsList.size(); i++) {
+                        tagsList.set(i, tagsList.get(i).trim());
+                    }
+
+                    if(tagsList.size() == 1) //If there is only one tag
+                        myWhere += "descriere LIKE '%" + tagsList.get(0) + "%'";
+                    else {  //If there are multiple tags add OR to list everything that matches
+                        myWhere += "(descriere LIKE '%" + tagsList.get(0) + "%'";
+                        for (int i = 1; i < tagsList.size(); i++) {
+                            myWhere += " OR descriere LIKE '%" + tagsList.get(i) + "%'";
+                        }
+                        myWhere += ")";
+                    }
+                }
+
+                String myQuerry = mySelect + myWhere;
+                System.out.println(myQuerry);   //Debug
+                java.sql.Statement stmt = null;
+                try {
+                    stmt = conn.createStatement();
+                    java.sql.ResultSet rs = stmt.executeQuery(myQuerry);
+                    result += "[\n";    //Iterate through all rows and build a JSON set response
+                    while (rs.next()) {
+                        result = "{\"size\": " + rs.getInt(1) + "}";
+                    }
+                } catch (SQLException e) {
+                    return e.getMessage();
+                } finally {
+                    if (stmt != null) {
+                        try {
+                            stmt.close();
+                        } catch (SQLException e) {
+                            return e.getMessage();
+                        }
+                    }
+                } 
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.getMessage();
+                }
+            }
+        }
+        if (result.equals("[\n") || result.equals("")) //If there are no results return empty set
+            return "{}";
+        else //Otherwise return the set
+        return result;
+    }
+
     @GetMapping("/listONGNOU")
     public String listONGNOU(@RequestParam(value = "size", defaultValue = "0") int size,
                             @RequestParam(value = "skip", defaultValue = "0") int skip,
