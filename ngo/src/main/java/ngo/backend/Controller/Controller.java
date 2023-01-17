@@ -215,9 +215,7 @@ public class Controller {
     }
 
     @GetMapping("/listONGSize")
-    public String listONGSize(@RequestParam(value = "size", defaultValue = "0") int size,
-                            @RequestParam(value = "skip", defaultValue = "0") int skip,
-                            @RequestParam(value = "city", defaultValue = "") String city,
+    public String listONGSize(@RequestParam(value = "city", defaultValue = "") String city,
                             @RequestParam(value = "county", defaultValue = "") String county,
                             @RequestParam(value = "tag", defaultValue = "") String tags) {
         Connection conn = null;
